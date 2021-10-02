@@ -1,6 +1,7 @@
-import json
 import pyttsx3 as p
 import speech_recognition as sr
+from maps import maps
+from meet import meet
 from news import *
 from jokes import *
 from seleniumweb import infow
@@ -139,6 +140,22 @@ elif "fact" and 'facts' in text2:
     
 elif "joke" and 'jokes' and 'laugh' in text2:
     randjoke()
-
 elif 'weather' in text2:
     weatherupdate()
+
+elif 'meeting' and 'meet' in text2:
+    googlemeet = meet()
+    googlemeet.get_info()
+    speak('Your meet is ready sir')
+
+elif "google" and "map" or "maps" or "location" in text2:
+    speak('Which location you want to see')
+    with sr.Microphone() as source:
+        r.energy_threshold  =10000
+        r.adjust_for_ambient_noise(source,1.2)
+        print('listening...')
+        audio = r.listen(source)
+        location = r.recognize_google(audio)
+    speak("Showing result for {} location".format(location))
+    gmap = maps()
+    gmap.get_info(location)
