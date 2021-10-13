@@ -17,14 +17,16 @@ engine.setProperty('rate',180)
 voices = engine.getProperty('voices')
 engine.setProperty('voice',voices[1].id)
 
+
 def speak(text):
     engine.say(text)
     engine.runAndWait()
 
 def randjoke():
     speak("Sure sir")
-    print(joke)
-    speak(joke)
+    fun = joke()
+    print(fun)
+    speak(fun)
     speak('Hello sir, should i share some more joke?')
     with sr.Microphone() as source:
         r.energy_threshold  =10000
@@ -33,7 +35,6 @@ def randjoke():
         audio = r.listen(source)
         jokes = r.recognize_google(audio)
     if "more" and "yes" in jokes:
-        speak('Sure sir')
         randjoke()
 
 def weatherupdate():
@@ -103,7 +104,6 @@ with sr.Microphone() as source:
     
 if 'information' in text2:
     speak('You need information related to which topic?')
-
     with sr.Microphone() as source:
         r.energy_threshold  =10000
         r.adjust_for_ambient_noise(source,1.2)
@@ -138,7 +138,7 @@ elif "news" and "newsupdate" in text2:
 elif "fact" and 'facts' in text2:
     randfact()
     
-elif "joke" and 'jokes' and 'laugh' in text2:
+elif "joke" or 'jokes' and 'laugh' in text2:
     randjoke()
 elif 'weather' in text2:
     weatherupdate()
@@ -148,7 +148,7 @@ elif 'meeting' and 'meet' in text2:
     googlemeet.get_info()
     speak('Your meet is ready sir')
 
-elif "google" and "map" or "maps" or "location" in text2:
+elif "google" and "map" and "maps" and "location" in text2:
     speak('Which location you want to see')
     with sr.Microphone() as source:
         r.energy_threshold  =10000
