@@ -1,6 +1,7 @@
 from selenium import webdriver
 import time
 from selenium.webdriver.chrome.options import Options
+from ss import *
 
 class meet():
     def __init__(self):
@@ -20,14 +21,14 @@ class meet():
         })
         username=self.driver.find_element_by_id('identifierId')
         username.click()
-        username.send_keys('mehulgawhale18hc@student.mes.ac.in')
+        username.send_keys(email)
 
         next=self.driver.find_element_by_xpath('//*[@id="identifierNext"]/div/button/span')
         next.click()
         time.sleep(2)
         password=self.driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input')
         password.click()
-        password.send_keys('m1e2h3u4l5')
+        password.send_keys(password)
         next=self.driver.find_element_by_xpath('//*[@id="passwordNext"]/div/button/span')
         next.click()
 
