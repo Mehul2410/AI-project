@@ -28,7 +28,7 @@ class meet():
         time.sleep(2)
         password=self.driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input')
         password.click()
-        password.send_keys(password)
+        password.send_keys('m1e2h3u4l5')
         next=self.driver.find_element_by_xpath('//*[@id="passwordNext"]/div/button/span')
         next.click()
 

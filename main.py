@@ -17,7 +17,6 @@ engine.setProperty('rate',180)
 voices = engine.getProperty('voices')
 engine.setProperty('voice',voices[1].id)
 
-
 def speak(text):
     engine.say(text)
     engine.runAndWait()
@@ -79,7 +78,6 @@ def randfact():
 
 r = sr.Recognizer()
 
-
 speak('Hello sir i am your voice assistant. How are you?')
 
 with sr.Microphone() as source:
@@ -115,7 +113,7 @@ if 'information' in text2:
     assist =infow()
     assist.get_info(infor)
 
-elif "play" and "youtube" and "video" in text2:
+elif "play" and "video" in text2:
     speak('what do you want me to play for you?')
     with sr.Microphone() as source:
         r.energy_threshold  =10000
@@ -127,7 +125,7 @@ elif "play" and "youtube" and "video" in text2:
     assist = music()
     assist.play(vid)
 
-elif "news" and "newsupdate" in text2:
+elif "news" in text2:
     print('Sure sir, Now i will read news for you.')
     speak('Sure sir, Now i will read news for you.')
     arr = news()
@@ -135,20 +133,20 @@ elif "news" and "newsupdate" in text2:
         print(i)
         speak(i)
         
-elif "fact" and 'facts' in text2:
+elif "fact" in text2:
     randfact()
     
-elif "joke" or 'jokes' and 'laugh' in text2:
+elif "joke" in text2:
     randjoke()
 elif 'weather' in text2:
     weatherupdate()
 
-elif 'meeting' and 'meet' in text2:
+elif 'meet' in text2:
     googlemeet = meet()
     googlemeet.get_info()
     speak('Your meet is ready sir')
 
-elif "google" and "map" and "maps" and "location" in text2:
+elif "Map" in text2:
     speak('Which location you want to see')
     with sr.Microphone() as source:
         r.energy_threshold  =10000
