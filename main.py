@@ -10,12 +10,13 @@ import randfacts
 import requests
 from weather import *
 from ss import *
+import time
 
 engine = p.init()
 rate= engine.getProperty('rate')
 engine.setProperty('rate',180)
 voices = engine.getProperty('voices')
-engine.setProperty('voice',voices[1].id)
+engine.setProperty('voice',voices[2].id)
 
 def speak(text):
     engine.say(text)
@@ -32,9 +33,16 @@ def randjoke():
         r.adjust_for_ambient_noise(source,1.2)
         print('listening...')
         audio = r.listen(source)
-        jokes = r.recognize_google(audio)
-    if "more" and "yes" in jokes:
-        randjoke()
+        try:
+            jokes = r.recognize_google(audio)    
+        except sr.UnknownValueError:
+            speak("Assistant could not understand the audio")
+        except sr.RequestError as ex:
+            speak("Request Error from Google Speech Recognition " + ex)
+        if "more" and "yes" in jokes:
+            randjoke()
+        else:
+            speak("Okay sir")
 
 def weatherupdate():
     speak('of which city you want to know the weather?')
@@ -56,10 +64,17 @@ def weatherupdate():
         r.adjust_for_ambient_noise(source,1.2)
         print('listening...')
         audio = r.listen(source)
-        nextweather = r.recognize_google(audio)
+        try:
+            nextweather = r.recognize_google(audio)
+        except sr.UnknownValueError:
+            speak("Assistant could not understand the audio")
+        except sr.RequestError as ex:
+            speak("Request Error from Google Speech Recognition " + ex)
     if "more" and "yes" in nextweather:
         speak('Sure sir')
         weatherupdate()
+    else:
+        speak("Okay sir")
 
 def randfact():
     x = randfacts.getFact()
@@ -71,13 +86,21 @@ def randfact():
         r.adjust_for_ambient_noise(source,1.2)
         print('listening...')
         audio = r.listen(source)
-        facts = r.recognize_google(audio)
+        try:
+            facts = r.recognize_google(audio)
+        except sr.UnknownValueError:
+            speak("Assistant could not understand the audio")
+        except sr.RequestError as ex:
+            speak("Request Error from Google Speech Recognition " + ex)
     if "more" and "yes" in facts:
         speak('Sure sir')
         randfact()
+    else:
+        print(facts)
+        speak("Okay sir")
 
+  
 r = sr.Recognizer()
-
 speak('Hello sir i am your voice assistant. How are you?')
 
 with sr.Microphone() as source:
@@ -85,8 +108,13 @@ with sr.Microphone() as source:
     r.adjust_for_ambient_noise(source,1.2)
     print('listening...')
     audio = r.listen(source)
-    text = r.recognize_google(audio)
-    print(text)
+    try:
+        text = r.recognize_google(audio)
+        print(text)
+    except sr.UnknownValueError:
+        speak("Assistant could not understand the audio")
+    except sr.RequestError as ex:
+        speak("Request Error from Google Speech Recognition " + ex)
 
 if "what" and "about" and "you" in text:
     speak('I am also having a good day sir')
@@ -99,7 +127,23 @@ with sr.Microphone() as source:
     audio= r.listen(source)
     text2 = r.recognize_google(audio)
     print(text2)
-    
+
+def more():
+    speak("what else can i do for you?")
+    with sr.Microphone() as source:
+        r.energy_threshold  =10000
+        r.adjust_for_ambient_noise(source,1.2)
+        print('listening....')
+        audio= r.listen(source)
+        try:
+            text2 = r.recognize_google(audio)
+        except sr.UnknownValueError:
+            speak("Assistant could not understand the audio")
+        except sr.RequestError as ex:
+            speak("Request Error from Google Speech Recognition " + ex)
+        
+    return text2
+
 if 'information' in text2:
     speak('You need information related to which topic?')
     with sr.Microphone() as source:
@@ -107,23 +151,57 @@ if 'information' in text2:
         r.adjust_for_ambient_noise(source,1.2)
         print('listening...')
         audio = r.listen(source)
-        infor = r.recognize_google(audio)
+        try:
+            infor = r.recognize_google(audio)
+        except sr.UnknownValueError:
+            speak("Assistant could not understand the audio")
+        except sr.RequestError as ex:
+            speak("Request Error from Google Speech Recognition " + ex)
         print(infor)
     speak('searching {} in wikipedia'.format(infor))
-    assist =infow()
+    assist = infow()
     assist.get_info(infor)
-
-elif "play" and "video" in text2:
+elif "meet" in text2:
+    googlemeet = meet()
+    googlemeet.get_info()
+    speak('Your meet is ready sir')
+    # text2= more()
+    # print(text2)
+elif "Map" in text2:
+    speak('Which location you want to see')
+    with sr.Microphone() as source:
+        r.energy_threshold  =10000
+        r.adjust_for_ambient_noise(source,1.2)
+        print('listening...')
+        audio = r.listen(source)
+        try:
+            location = r.recognize_google(audio)
+        except sr.UnknownValueError:
+            speak("Assistant could not understand the audio")
+        except sr.RequestError as ex:
+            speak("Request Error from Google Speech Recognition " + ex)
+    speak("Showing result for {} location".format(location))
+    gmap = maps()
+    gmap.get_info(location)
+elif "video" in text2:
     speak('what do you want me to play for you?')
     with sr.Microphone() as source:
         r.energy_threshold  =10000
         r.adjust_for_ambient_noise(source,1.2)
         print('listening...')
         audio = r.listen(source)
-        vid = r.recognize_google(audio)
+        try:
+            vid = r.recognize_google(audio)
+        except sr.UnknownValueError:
+            speak("Assistant could not understand the audio")
+        except sr.RequestError as ex:
+            speak("Request Error from Google Speech Recognition " + ex)
     speak("Playing {} on youtube".format(vid))
     assist = music()
     assist.play(vid)
+
+elif "weather" in text2:
+    weatherupdate()
 
 elif "news" in text2:
     print('Sure sir, Now i will read news for you.')
@@ -138,22 +216,3 @@ elif "fact" in text2:
     
 elif "joke" in text2:
     randjoke()
-elif 'weather' in text2:
-    weatherupdate()
-
-elif 'meet' in text2:
-    googlemeet = meet()
-    googlemeet.get_info()
-    speak('Your meet is ready sir')
-
-elif "Map" in text2:
-    speak('Which location you want to see')
-    with sr.Microphone() as source:
-        r.energy_threshold  =10000
-        r.adjust_for_ambient_noise(source,1.2)
-        print('listening...')
-        audio = r.listen(source)
-        location = r.recognize_google(audio)
-    speak("Showing result for {} location".format(location))
-    gmap = maps()
-    gmap.get_info(location)

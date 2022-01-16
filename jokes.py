@@ -8,7 +8,3 @@ def joke():
   threading.Timer(60.0, joke).start()
   json_data = requests.get(url).json()
   return json_data['joke']
-
-
-
-

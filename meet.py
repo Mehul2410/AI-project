@@ -32,6 +32,6 @@ class meet():
         next=self.driver.find_element_by_xpath('//*[@id="passwordNext"]/div/button/span')
         next.click()
 
-        time.sleep(15)
-        dismiss=self.driver.find_element_by_xpath('//*[@id="yDmH0d"]/div[3]/div/div[2]/div[3]/div/span/span')
-        dismiss.click()
+        time.sleep(5)
+        # dismiss=self.driver.find_element_by_xpath('//*[@id="yDmH0d"]/div[3]/div/div[2]/div[3]/div/span/span')
+        # dismiss.click()
